@@ -185,6 +185,7 @@ To remove only ScheduleSend and keep Vencord, switch it off in Vencord's plugin 
 | ScheduleSend isn't in the plugin list | Make sure the folder is `src\userplugins\scheduleSend`, run `pnpm build`, then press Ctrl+R in Discord |
 | Build fails with `Could not resolve "@utils/types"` | The plugin folder is a shortcut or symlink. Delete it and clone the repo straight into `src\userplugins` |
 | No clock button | Right-click the message box, open Vencord Buttons, and tick ScheduleSend |
+| An error mentions `SUCCESS` or `FAILURE` | Update ScheduleSend and rebuild Vencord. A `SUCCESS` error happens after the message is saved: check the scheduled messages list and discard any duplicates before scheduling again |
 
 ## Development
 
@@ -193,11 +194,13 @@ From the `Vencord` folder:
 ```powershell
 pnpm exec eslint src/userplugins/scheduleSend
 pnpm exec tsc --noEmit
-pnpm exec tsx --test src/userplugins/scheduleSend/timeParser.test.ts src/userplugins/scheduleSend/queueLogic.test.ts
+pnpm exec tsx --test src/userplugins/scheduleSend/timeParser.test.ts src/userplugins/scheduleSend/queueLogic.test.ts src/userplugins/scheduleSend/ScheduleModal.test.ts
 pnpm build --dev
 ```
 
 `timeParser.ts` and `queueLogic.ts` import nothing from Discord or Vencord, so their tests run in plain Node.
+
+`ScheduleModal.test.ts` runs the modal's submit handler with mocked Discord APIs. It checks that messages stay saved when the confirmation fails, and that a save failure keeps the draft and dialog available for retry.
 
 ## License
 

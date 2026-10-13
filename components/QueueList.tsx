@@ -6,7 +6,7 @@
 
 import { Button } from "@components/Button";
 import { Paragraph } from "@components/Paragraph";
-import { Clickable, showToast, Toasts, useState } from "@webpack/common";
+import { Clickable, showToast, useState } from "@webpack/common";
 
 import { cancelMessage, sendNow } from "../scheduler";
 import { useQueue } from "../store";
@@ -33,7 +33,7 @@ function QueueRow({ item, ownedByOther, onNavigate }: { item: ScheduledMessage; 
         try {
             await action();
         } catch (error) {
-            showToast(error instanceof Error ? error.message : String(error), Toasts.Type.FAILURE);
+            showToast(error instanceof Error ? error.message : String(error), "failure");
         } finally {
             setBusy(false);
         }

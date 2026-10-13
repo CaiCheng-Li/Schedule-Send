@@ -10,13 +10,13 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { getTheme, Theme } from "@utils/discord";
 import { RenderModalProps } from "@vencord/discord-types";
-import { ChannelStore, Modal, openModal, showToast, TextArea, TextInput, Toasts, useState } from "@webpack/common";
+import { ChannelStore, Modal, openModal, showToast, TextArea, TextInput, useState } from "@webpack/common";
 
 import { rescheduleMessage, scheduleMessage } from "../scheduler";
 import { settings } from "../settings";
 import { MAX_CONTENT_LENGTH, parseWhen, TIME_EXAMPLES, validateContent, validateSendAt } from "../timeParser";
 import type { ScheduledMessage } from "../types";
-import { canSendIn, cl, clearChatInput, describeChannel, formatTime, renderTime, toDateTimeInput, toWhenText } from "../utils";
+import { canSendIn, cl, clearChatInput, describeChannel, formatTime, logger, renderTime, toDateTimeInput, toWhenText } from "../utils";
 
 export interface ScheduleModalOptions {
     channelId: string;
@@ -65,13 +65,20 @@ function ScheduleModal({ channelId, initialContent = "", editing, fromMainChat =
                 await rescheduleMessage(editing.id, content, at);
             } else {
                 await scheduleMessage(channelId, content, at);
-                if (initialContent && settings.store.clearChatBoxAfterScheduling) clearChatInput(channelId, fromMainChat);
             }
-            showToast(`Scheduled for ${formatTime(at!)}`, Toasts.Type.SUCCESS);
-            modalProps.onClose();
         } catch (error) {
             setSubmitError(error instanceof Error ? error.message : String(error));
             setBusy(false);
+            return;
+        }
+
+        // The queue is saved. A confirmation failure must not offer to schedule it a second time.
+        if (!editing && initialContent && settings.store.clearChatBoxAfterScheduling) clearChatInput(channelId, fromMainChat);
+        modalProps.onClose();
+        try {
+            showToast(`Scheduled for ${formatTime(at!)}`, "success");
+        } catch (error) {
+            logger.warn("Message saved, but couldn't show the scheduling confirmation", error);
         }
     }
 
