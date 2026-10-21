@@ -33,7 +33,7 @@ function QueueRow({ item, ownedByOther, onNavigate }: { item: ScheduledMessage; 
         try {
             await action();
         } catch (error) {
-            showToast(error instanceof Error ? error.message : String(error), "failure");
+            showToast({ text: error instanceof Error ? error.message : String(error), variant: "critical" });
         } finally {
             setBusy(false);
         }

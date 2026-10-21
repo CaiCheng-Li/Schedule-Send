@@ -76,7 +76,7 @@ function ScheduleModal({ channelId, initialContent = "", editing, fromMainChat =
         if (!editing && initialContent && settings.store.clearChatBoxAfterScheduling) clearChatInput(channelId, fromMainChat);
         modalProps.onClose();
         try {
-            showToast(`Scheduled for ${formatTime(at!)}`, "success");
+            showToast({ text: `Scheduled for ${formatTime(at!)}`, variant: "success" });
         } catch (error) {
             logger.warn("Message saved, but couldn't show the scheduling confirmation", error);
         }

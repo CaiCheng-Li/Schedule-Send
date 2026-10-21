@@ -32,7 +32,7 @@ function createModal(options: HarnessOptions = {}) {
     // Run the real modal and its submit handler without mounting Discord or sending messages.
     const state: any[] = [];
     const saved: { id?: string; content: string; sendAt: number; }[] = [];
-    const toastCalls: { message: string; type: string; }[] = [];
+    const toastCalls: { text: string; variant?: string; }[] = [];
     const events: string[] = [];
     const warnings: unknown[][] = [];
     let closed = false;
@@ -57,8 +57,6 @@ function createModal(options: HarnessOptions = {}) {
             Modal: "Modal",
             TextArea: "TextArea",
             TextInput: "TextInput",
-            // Current Vencord exposes show/pop; there is no Toasts.Type enum.
-            Toasts: { show() { }, pop() { } },
             useState(initial: any) {
                 const index = state.length;
                 state.push(index === 1 ? "30m" : typeof initial === "function" ? initial() : initial);
@@ -69,8 +67,8 @@ function createModal(options: HarnessOptions = {}) {
                 const component = boundary.props.children[0];
                 modal = component.type(component.props);
             },
-            showToast(message: string, type: string) {
-                toastCalls.push({ message, type });
+            showToast(data: { text: string; variant?: string; }) {
+                toastCalls.push(data);
                 events.push("toast");
                 if (options.toastError) throw options.toastError;
             },
@@ -127,14 +125,14 @@ function createModal(options: HarnessOptions = {}) {
 }
 
 describe("ScheduleModal submission", () => {
-    test("saves and closes when Toasts.Type is absent", async () => {
+    test("saves, closes, and confirms with a success toast", async () => {
         const modal = createModal();
         await modal.submit();
         assert.equal(modal.saved.length, 1);
         assert.equal(modal.error, null);
         assert.equal(modal.closed, true);
         assert.equal(modal.draftCleared, true);
-        assert.equal(modal.toastCalls[0].type, "success");
+        assert.equal(modal.toastCalls[0].variant, "success");
     });
 
     test("a broken toast cannot turn a saved message into a retryable failure", async () => {
