@@ -49,7 +49,8 @@ function createModal(options: HarnessOptions = {}) {
     const modules: Record<string, any> = {
         "@components/Button": { Button: "Button" },
         "@components/ErrorBoundary": { default: "ErrorBoundary", __esModule: true },
-        "@components/Heading": { HeadingSecondary: "HeadingSecondary" },
+        "@components/Heading": { Heading: "Heading" },
+        "@components/margins": { Margins: { bottom8: "bottom8" } },
         "@components/Paragraph": { Paragraph: "Paragraph" },
         "@utils/discord": { getTheme: () => "dark", Theme: { Light: "light" } },
         "@webpack/common": {

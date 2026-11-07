@@ -8,7 +8,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import definePlugin from "@utils/types";
 import { Channel } from "@vencord/discord-types";
@@ -197,7 +197,7 @@ export default definePlugin({
                 Click the clock button next to the message box or use <code>/schedule</code>. Times like {TIME_EXAMPLES} work.
                 Messages are sent by this Discord app, so it has to be running (minimized is fine) when they're due.
             </Paragraph>
-            <HeadingSecondary className={cl("settings-heading")}>Scheduled messages</HeadingSecondary>
+            <Heading className={cl("settings-heading")}>Scheduled messages</Heading>
             <QueueList />
         </ErrorBoundary>
     ),

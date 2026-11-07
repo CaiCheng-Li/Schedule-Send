@@ -6,7 +6,8 @@
 
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { HeadingSecondary } from "@components/Heading";
+import { Heading } from "@components/Heading";
+import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { getTheme, Theme } from "@utils/discord";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -98,7 +99,7 @@ function ScheduleModal({ channelId, initialContent = "", editing, fromMainChat =
         >
             <div className={cl("form")}>
                 <section>
-                    <HeadingSecondary>Message</HeadingSecondary>
+                    <Heading className={Margins.bottom8}>Message</Heading>
                     <TextArea
                         value={content}
                         onChange={setContent}
@@ -112,7 +113,7 @@ function ScheduleModal({ channelId, initialContent = "", editing, fromMainChat =
                 </section>
 
                 <section>
-                    <HeadingSecondary>Send</HeadingSecondary>
+                    <Heading className={Margins.bottom8}>Send</Heading>
                     <TextInput
                         value={whenText}
                         onChange={setWhenText}
